@@ -59,61 +59,64 @@ export const FileEdit = ({ docId }: { docId: string }) => {
   else if (flattenedJson === null) return <p>Error fetching JSON</p>;
 
   return (
-    <div className="p-4">
-      <div className="mb-4">
-        <LanguageSelector />
-      </div>
-      <h2 className="font-bold">
-        {docId}
-        <span className="ml-4 text-sm text-gray-500">
-          ({selectedLanguage?.name})
-        </span>
-      </h2>
-      <hr className="my-4" />
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div
-          className="grid max-h-[70vh] gap-y-2 items-center overflow-y-scroll border-2 border-gray-300 rounded p-4"
-          style={{
-            gridTemplateColumns: "minmax(auto, 30%) minmax(0, auto)",
-          }}
-        >
-          {Object.keys(flattenedJson).map((key) => (
-            <>
-              <label htmlFor={key} className="text-left pr-4 font-medium w-fit max-w-full whitespace-normal break-words">
-                {key}
-              </label>
-              <Controller
-                name={key}
-                control={control}
-                render={({ field }) => (
-                  <input
-                    {...field}
-                    id={key}
-                    className="px-3 py-2 border border-gray-300 rounded w-full"
-                  />
-                )}
-              />
-            </>
-          ))}
-        </div>
-        {status && (
+    <>
+      <LanguageSelector />
+      <div>
+        <h2 className="font-bold">
+          {docId}
+          <span className="ml-4 text-sm text-gray-500">
+            ({selectedLanguage?.name})
+          </span>
+        </h2>
+        <hr className="my-4" />
+        <form className="flex flex-col gap-2" onSubmit={handleSubmit(onSubmit)}>
           <div
-            className={`p-2 text-white ${
-              status.type === "success" ? "bg-green-500" : "bg-red-500"
-            }`}
+            className="grid max-h-[70vh] gap-y-2 items-center overflow-y-scroll border-2 border-gray-300 rounded p-4"
+            style={{
+              gridTemplateColumns: "minmax(auto, 30%) minmax(0, auto)",
+            }}
           >
-            {status.message}
+            {Object.keys(flattenedJson).map((key) => (
+              <>
+                <label
+                  htmlFor={key}
+                  className="text-left pr-4 font-medium w-fit max-w-full whitespace-normal break-words"
+                >
+                  {key}
+                </label>
+                <Controller
+                  name={key}
+                  control={control}
+                  render={({ field }) => (
+                    <input
+                      {...field}
+                      id={key}
+                      className="px-3 py-2 border border-gray-300 rounded w-full"
+                    />
+                  )}
+                />
+              </>
+            ))}
           </div>
-        )}
-        <div className="flex justify-end">
-          <button
-            type="submit"
-            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
-          >
-            Save Changes
-          </button>
-        </div>
-      </form>
-    </div>
+          {status && (
+            <div
+              className={`p-2 text-white ${
+                status.type === "success" ? "bg-green-500" : "bg-red-500"
+              }`}
+            >
+              {status.message}
+            </div>
+          )}
+          <div className="flex justify-end">
+            <button
+              type="submit"
+              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
+            >
+              Save Changes
+            </button>
+          </div>
+        </form>
+      </div>
+    </>
   );
 };

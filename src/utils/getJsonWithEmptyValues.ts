@@ -12,7 +12,7 @@ function emptyValues(obj: any): any {
   // If it is an object, recursively process each key
   const result: any = {};
   for (const key in obj) {
-    if (obj.hasOwnProperty(key)) {
+    if (key in obj) {
       result[key] = emptyValues(obj[key]);
     }
   }

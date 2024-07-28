@@ -16,9 +16,9 @@ export const GuardedLayout = ({ children }: PropsWithChildren) => {
   }
 
   return (
-    <div>
-      <div className="flex flex-row justify-between">
-        <nav className="flex flex-row gap-2">
+    <>
+      <nav className="flex flex-row justify-between">
+        <div className="flex flex-row gap-2">
           <NavLink end to={routes.Dashboard}>
             List files
           </NavLink>
@@ -26,14 +26,10 @@ export const GuardedLayout = ({ children }: PropsWithChildren) => {
             Upload file
           </NavLink>
           <NavLink to={routes.LanguageManage}>Manage Languages</NavLink>
-        </nav>
-        <button onClick={logout}>Logout</button>
-      </div>
-      <div className="flex flex-col">
-        <div className="flex flex-row">
-          <main className="flex h-fit flex-1 flex-col pt-20">{children}</main>
         </div>
-      </div>
-    </div>
+        <button onClick={logout}>Logout</button>
+      </nav>
+      <main className="flex h-fit flex-1 flex-col">{children}</main>
+    </>
   );
 };
