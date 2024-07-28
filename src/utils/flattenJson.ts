@@ -1,3 +1,5 @@
+import sortObject from "deep-sort-object";
+
 export const flattenJson = (
   data: any,
   parentKey: string | number = "",
@@ -21,5 +23,6 @@ export const flattenJson = (
       }
     }
   }
-  return result;
+  return sortObject(result);
 };
+

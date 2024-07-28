@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@headlessui/react": "1.7.x",
+    "deep-sort-object": "^1.0.2",
     "firebase": "^10.12.4",
     "jotai": "^2.9.1",
     "react": "^18.3.1",
