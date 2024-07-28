@@ -13,7 +13,7 @@ type FileUploadForm = {
 
 export const FileUpload = () => {
   const { register, handleSubmit } = useForm<FileUploadForm>();
-  const lang = useJSONFileLanguage();
+  const [lang] = useJSONFileLanguage();
   const [status, setStatus] = useState<undefined | Status>(undefined);
   const collectionName = useJSONCollectionName();
 
