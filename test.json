@@ -1,0 +1,30 @@
+{
+  "days": "Tage",
+  "device": "Gerät",
+  "devices": {
+    "Andere": "Anderes Gerät",
+    "Camera": "Kamera",
+    "GPS_Tracker": "GPS Tracker",
+    "IoT_Device": "IoT Gerät",
+    "Laptop": "Laptop",
+    "Mobile_Hotspot": "Mobile Hotspot",
+    "Router": "WLAN Home Router",
+    "Smartphone": "Smartphone",
+    "Tablet": "Tablet",
+    "Vehicle": "Fahrzeug",
+    "Wearable": "Wearable"
+  },
+  "label": {
+    "back": "zurück",
+    "complete": "abschliessen",
+    "forward": "weiter",
+    "toShop": "Zum Shop"
+  },
+  "language": "Sprache",
+  "logoName": "Digital Republic",
+  "nothingFound": "Nichts gefunden.",
+  "selected": "ausgewählt",
+  "support": "Support",
+  "welcome": "Willkommen",
+  "welcomeEsim": "eSIM Onboarding"
+}
