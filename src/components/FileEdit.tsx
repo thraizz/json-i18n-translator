@@ -71,22 +71,32 @@ export const FileEdit = ({ docId }: { docId: string }) => {
         </span>
       </h2>
       <hr className="my-4" />
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        {Object.keys(flattenedJson).map((key) => (
-          <div key={key} className="flex items-center">
-            <label className="w-1/3 text-right pr-4 font-medium">{key}</label>
-            <Controller
-              name={key}
-              control={control}
-              render={({ field }) => (
-                <input
-                  {...field}
-                  className="w-2/3 px-3 py-2 border border-gray-300 rounded"
-                />
-              )}
-            />
-          </div>
-        ))}
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div
+          className="grid max-h-[70vh] gap-y-2 items-center overflow-y-scroll border-2 border-gray-300 rounded p-4"
+          style={{
+            gridTemplateColumns: "minmax(auto, 48rem) minmax(0, auto)",
+          }}
+        >
+          {Object.keys(flattenedJson).map((key) => (
+            <>
+              <label htmlFor={key} className="text-left pr-4 font-medium w-fit">
+                {key}
+              </label>
+              <Controller
+                name={key}
+                control={control}
+                render={({ field }) => (
+                  <input
+                    {...field}
+                    id={key}
+                    className="px-3 py-2 border border-gray-300 rounded w-full"
+                  />
+                )}
+              />
+            </>
+          ))}
+        </div>
         {status && (
           <div
             className={`p-2 text-white ${
