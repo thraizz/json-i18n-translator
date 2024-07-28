@@ -19,7 +19,7 @@ export const FileEdit = ({ docId }: { docId: string }) => {
   const [status, setStatus] = useState<undefined | Status>(undefined);
   const { control, handleSubmit, reset } = useForm<EditForm>();
 
-  const lang = useJSONFileLanguage();
+  const [lang] = useJSONFileLanguage();
   const { languages } = useLanguages();
 
   const selectedLanguage = languages.find((l) => l.id === lang);
@@ -35,7 +35,6 @@ export const FileEdit = ({ docId }: { docId: string }) => {
       if (jsonData) {
         if (jsonData.lang) delete jsonData.lang;
         const flattened = flattenJson(jsonData);
-        console.log(flattened);
         setFlattenedJson(flattened);
         reset(flattened);
       } else {

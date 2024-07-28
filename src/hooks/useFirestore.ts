@@ -89,7 +89,16 @@ export const uploadJsonFile = async (
 ) => {
   try {
     const docRef = doc(db, collectionName, docId);
-    await setDoc(docRef, { [lang]: jsonObject });
+    // First, try to get the document to see if it exists
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      // If it exists, update the document
+      await updateDoc(docRef, { [lang]: jsonObject });
+      console.log("Document updated with ID: ", docRef.id);
+      return;
+    } else {
+      await setDoc(docRef, { [lang]: jsonObject });
+    }
     console.log("Document written with ID: ", docRef.id);
   } catch (e) {
     console.error("Error writing document: ", e);

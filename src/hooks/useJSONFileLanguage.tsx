@@ -1,9 +1,4 @@
-import { useSearchParams } from "react-router-dom";
+import { useAtom } from "jotai";
+import { languageAtom } from "../atoms";
 
-export const getLangFromSearchParams = (searchParams: URLSearchParams) =>
-  searchParams.get("lang") || "en";
-
-export const useJSONFileLanguage = () => {
-  const [searchParams] = useSearchParams();
-  return getLangFromSearchParams(searchParams);
-};
+export const useJSONFileLanguage = () => useAtom(languageAtom);
