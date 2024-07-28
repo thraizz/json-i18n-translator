@@ -17,7 +17,7 @@ export const GuardedLayout = ({ children }: PropsWithChildren) => {
 
   return (
     <div>
-      <div className="flex border-b-white border-b-2 flex-row justify-between">
+      <div className="flex flex-row justify-between">
         <nav className="flex flex-row gap-2">
           <NavLink end to={routes.Dashboard}>
             List files
@@ -29,7 +29,6 @@ export const GuardedLayout = ({ children }: PropsWithChildren) => {
         </nav>
         <button onClick={logout}>Logout</button>
       </div>
-      <header>Hello, {user?.uid}</header>
       <div className="flex flex-col">
         <div className="flex flex-row">
           <main className="flex h-fit flex-1 flex-col pt-20">{children}</main>

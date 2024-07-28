@@ -25,4 +25,3 @@ export const flattenJson = (
   }
   return sortObject(result);
 };
-

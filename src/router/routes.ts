@@ -11,7 +11,7 @@ const dashboardRoutes = {
 
 export const routes = {
   Login: "/login",
-  Create: "/create",
+  SignUp: "/signup",
   Reset: "/reset",
   GithubCallback: "/callback/gh",
   GitlabCallback: "/callback/gl",

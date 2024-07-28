@@ -7,10 +7,7 @@ import { LoginEmailForm } from "./LoginEmailForm";
 export const LoginContainer = () => (
   <AppearTransition>
     <LoginEmailForm />
-    <Link
-      to={routes.Create}
-      className="primary-button-inverted mt-4 block w-full text-center"
-    >
+    <Link to={routes.SignUp} className="mt-4 block w-full text-center">
       Create account
     </Link>
     <AuthGoogleSSO />

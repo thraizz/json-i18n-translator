@@ -39,7 +39,12 @@ export const FileSelection = () => {
   }
 
   if (documents.length === 0) {
-    return <div>No documents found</div>;
+    return (
+      <div className="flex flex-col gap-8 max-w-fit">
+        <p>No documents found.</p>
+        <Link to={routes.FileUpload}>Upload your first file</Link>
+      </div>
+    );
   }
 
   return (
