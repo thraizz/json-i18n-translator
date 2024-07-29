@@ -15,5 +15,6 @@ export const unflattenJson = (data: any) => {
       }, result);
     }
   }
+  console.log(result);
   return result;
 };

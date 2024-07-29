@@ -10,9 +10,9 @@ import { flattenJson } from "../utils/flattenJson";
 import { unflattenJson } from "../utils/unflattenJson";
 import { LanguageSelector } from "./LanguageSelector";
 import { useJSONFileLanguage } from "../hooks/useJSONFileLanguage";
-import { generateJsonFile } from "../hooks/useGenerateJsonFile";
 import { SortKeysBySelector } from "./SortKeysBySelector";
 import { sortKeysBy, useFileSorting } from "../hooks/useFileSorting";
+import { UrlsCard } from "./UrlsCard";
 
 export type Field = {
   label: string;
@@ -27,7 +27,6 @@ type Status = { type: "success" | "error"; message: string };
 export const FileEdit = ({ docId }: { docId: string }) => {
   const { sorting } = useFileSorting();
   const [status, setStatus] = useState<Status | undefined>(undefined);
-  const [fileUrl, setFileUrl] = useState<string | null>(null);
   const [jsonData, setJsonData] = useState<any | null>(null);
   const [lang] = useJSONFileLanguage();
   const { languages } = useLanguages();
@@ -74,20 +73,11 @@ export const FileEdit = ({ docId }: { docId: string }) => {
   const onSubmit = async (data: EditForm) => {
     if (!collectionName) return;
     try {
-      const unflattenedData = unflattenJson(data);
+      const unflattenedData = unflattenJson(turnIntoKeyValuePairs(data));
       await updateJsonFile(collectionName, docId, unflattenedData, lang);
       setStatus({ type: "success", message: "JSON uploaded successfully!" });
     } catch (e) {
       setStatus({ type: "error", message: "Failed to upload JSON" });
-    }
-  };
-
-  const handleGenerateJsonFile = async () => {
-    try {
-      const url = await generateJsonFile(docId, lang);
-      setFileUrl(url);
-    } catch (e) {
-      console.error("Failed to generate JSON file:", e);
     }
   };
 
@@ -99,6 +89,10 @@ export const FileEdit = ({ docId }: { docId: string }) => {
       <LanguageSelector />
       <SortKeysBySelector />
       <div>
+        <h2 className="font-bold text-2xl">Links</h2>
+        <UrlsCard docId={docId} />
+      </div>
+      <div>
         <h2 className="font-bold">
           {docId}
           <span className="ml-4 text-sm text-gray-500">
@@ -106,6 +100,7 @@ export const FileEdit = ({ docId }: { docId: string }) => {
           </span>
         </h2>
         <hr className="my-4" />
+        <h3 className="font-bold text-2xl">Edit JSON</h3>
         <form className="flex flex-col gap-2" onSubmit={handleSubmit(onSubmit)}>
           <div
             className="grid max-h-[70vh] gap-y-2 items-center overflow-y-scroll border-2 border-gray-300 rounded p-4"
@@ -146,25 +141,6 @@ export const FileEdit = ({ docId }: { docId: string }) => {
           )}
           <div className="flex justify-end gap-2">
             <button
-              type="button"
-              onClick={handleGenerateJsonFile}
-              className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-700"
-            >
-              Generate JSON File
-            </button>
-            {fileUrl && (
-              <div className="mt-2">
-                <a
-                  href={fileUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-500"
-                >
-                  Download JSON File
-                </a>
-              </div>
-            )}
-            <button
               type="submit"
               className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
             >
@@ -175,4 +151,14 @@ export const FileEdit = ({ docId }: { docId: string }) => {
       </div>
     </>
   );
+};
+
+const turnIntoKeyValuePairs: (data: EditForm) => { [key: string]: string } = (
+  data,
+) => {
+  const obj: { [key: string]: string } = {};
+  data.keys.forEach((field) => {
+    if (field.label && field.value) obj[field.label] = field.value;
+  });
+  return obj;
 };
