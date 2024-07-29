@@ -23,10 +23,13 @@ export const sortKeysBy: (
       value: data[label],
     }));
   } else if (sorting === SORTING_OPTIONS.BY_EMPTY) {
-    const a = Object.fromEntries(
+    const sortedObject = Object.fromEntries(
       Object.entries(data).sort((a, b) => sortByEmpty(a[1], b[1])),
     );
-    return Object.keys(a).map((label) => ({ label, value: a[label] }));
+    return Object.keys(sortedObject).map((label) => ({
+      label,
+      value: sortedObject[label],
+    }));
   }
   return [];
 };
