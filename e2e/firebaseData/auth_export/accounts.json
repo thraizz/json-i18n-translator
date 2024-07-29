@@ -1,0 +1,25 @@
+{
+  "kind": "identitytoolkit#DownloadAccountResponse",
+  "users": [
+    {
+      "localId": "aWMTKydN6w2vvOHrs42XKefH2lsC",
+      "displayName": "Orange Panda",
+      "screenName": "panda_orange",
+      "email": "orange.panda.310@example.com",
+      "emailVerified": true,
+      "createdAt": "1722235690132",
+      "lastLoginAt": "1722235690134",
+      "providerUserInfo": [
+        {
+          "providerId": "google.com",
+          "rawId": "7759148764937307021264860390693148746672",
+          "federatedId": "7759148764937307021264860390693148746672",
+          "displayName": "Orange Panda",
+          "email": "orange.panda.310@example.com",
+          "screenName": "panda_orange"
+        }
+      ],
+      "lastRefreshAt": "2024-07-29T06:48:10.134Z"
+    }
+  ]
+}

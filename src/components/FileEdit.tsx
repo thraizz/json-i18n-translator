@@ -10,6 +10,7 @@ import { flattenJson } from "../utils/flattenJson";
 import { unflattenJson } from "../utils/unflattenJson";
 import { LanguageSelector } from "./LanguageSelector";
 import { useJSONFileLanguage } from "../hooks/useJSONFileLanguage";
+import { generateJsonFile } from "../hooks/useGenerateJsonFile";
 
 export const FileEdit = ({ docId }: { docId: string }) => {
   type EditForm = {
@@ -17,6 +18,8 @@ export const FileEdit = ({ docId }: { docId: string }) => {
   };
   type Status = { type: "success" | "error"; message: string };
   const [status, setStatus] = useState<undefined | Status>(undefined);
+  const [fileUrl, setFileUrl] = useState<string | null>(null);
+
   const { control, handleSubmit, reset } = useForm<EditForm>();
 
   const [lang] = useJSONFileLanguage();
@@ -52,6 +55,15 @@ export const FileEdit = ({ docId }: { docId: string }) => {
       setStatus({ type: "success", message: "JSON uploaded successfully!" });
     } catch (e) {
       setStatus({ type: "error", message: "Failed to upload JSON" });
+    }
+  };
+
+  const handleGenerateJsonFile = async () => {
+    try {
+      const url = await generateJsonFile(docId, lang);
+      setFileUrl(url);
+    } catch (e) {
+      console.error("Failed to generate JSON file:", e);
     }
   };
 
@@ -107,7 +119,27 @@ export const FileEdit = ({ docId }: { docId: string }) => {
               {status.message}
             </div>
           )}
-          <div className="flex justify-end">
+          <div className="flex justify-end gap-2">
+            <button
+              type="button"
+              onClick={handleGenerateJsonFile}
+              className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-700"
+            >
+              Generate JSON File
+            </button>
+            {fileUrl && (
+              <div className="mt-2">
+                <a
+                  href={fileUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-500"
+                >
+                  Download JSON File
+                </a>
+              </div>
+            )}
+
             <button
               type="submit"
               className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"

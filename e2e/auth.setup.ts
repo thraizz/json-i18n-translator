@@ -7,9 +7,11 @@ setup("authenticate", async ({ page }) => {
   const page1Promise = page.waitForEvent("popup");
   await page.getByRole("button", { name: "Sign in with Google" }).click();
   const page1 = await page1Promise;
-  await page1.getByText("person Olive Grass olive.").click();
+  await expect(page1.getByText("Orange Panda")).toBeVisible();
+  await page1.getByText("Orange Panda").click();
 
-  await expect(page.getByText("Dashboard")).toBeVisible();
+  await expect(page.getByText("Uploaded Documents")).toBeVisible();
+  await expect(page.getByText("translation.json")).toBeVisible();
 
   await page.context().storageState({ path: authFile });
 });

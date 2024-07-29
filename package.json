@@ -8,7 +8,8 @@
     "build": "tsc -b && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "firebase:emulate": "firebase emulators:start --import=\"./e2e/firebaseData\"",
+    "firebase:emulate": "firebase emulators:start --export-on-exit --import=\"./firebaseData\"",
+    "firebase:e2e": "firebase emulators:start --import=\"./e2e/firebaseData\"",
     "test": "playwright test --headed"
   },
   "dependencies": {

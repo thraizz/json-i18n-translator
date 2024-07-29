@@ -31,3 +31,4 @@ dist-ssr
 .auth/
 
 .env
+serviceAccount.json
