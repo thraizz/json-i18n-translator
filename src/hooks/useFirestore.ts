@@ -138,6 +138,7 @@ export const useLanguages = () => {
 
   useEffect(() => {
     getLanguages();
+    // @eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   return { languages, addLanguage, refresh: getLanguages };

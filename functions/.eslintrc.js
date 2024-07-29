@@ -7,6 +7,7 @@ module.exports = {
     ecmaVersion: 2018,
   },
   extends: ["eslint:recommended", "google"],
+
   rules: {
     "no-restricted-globals": ["error", "name", "length"],
     "prefer-arrow-callback": "error",

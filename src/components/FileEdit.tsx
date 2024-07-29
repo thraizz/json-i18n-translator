@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useForm, Controller } from "react-hook-form";
 import {
   fetchJsonFile,
@@ -11,24 +11,34 @@ import { unflattenJson } from "../utils/unflattenJson";
 import { LanguageSelector } from "./LanguageSelector";
 import { useJSONFileLanguage } from "../hooks/useJSONFileLanguage";
 import { generateJsonFile } from "../hooks/useGenerateJsonFile";
+import { SortKeysBySelector } from "./SortKeysBySelector";
+import { sortKeysBy, useFileSorting } from "../hooks/useFileSorting";
 
 export const FileEdit = ({ docId }: { docId: string }) => {
   type EditForm = {
     [key: string]: string;
   };
+  const { sorting } = useFileSorting();
   type Status = { type: "success" | "error"; message: string };
   const [status, setStatus] = useState<undefined | Status>(undefined);
   const [fileUrl, setFileUrl] = useState<string | null>(null);
+  const [jsonData, setJsonData] = useState<any | null>(null);
 
-  const { control, handleSubmit, reset } = useForm<EditForm>();
+  const { control, handleSubmit, reset } = useForm<EditForm>({
+    defaultValues: {},
+  });
 
   const [lang] = useJSONFileLanguage();
   const { languages } = useLanguages();
 
   const selectedLanguage = languages.find((l) => l.id === lang);
-  const [flattenedJson, setFlattenedJson] = useState<object | undefined | null>(
-    undefined,
-  );
+  const flattenedJson = useMemo(() => {
+    const flattened = sortKeysBy(flattenJson(jsonData), sorting);
+    return flattened;
+  }, [jsonData, sorting]);
+  useEffect(() => {
+    reset(flattenedJson);
+  }, [flattenedJson, reset]);
   const collectionName = useJSONCollectionName();
 
   useEffect(() => {
@@ -37,11 +47,9 @@ export const FileEdit = ({ docId }: { docId: string }) => {
       const jsonData = await fetchJsonFile(collectionName, docId, lang);
       if (jsonData) {
         if (jsonData.lang) delete jsonData.lang;
-        const flattened = flattenJson(jsonData);
-        setFlattenedJson(flattened);
-        reset(flattened);
+        setJsonData(jsonData);
       } else {
-        setFlattenedJson(null);
+        setJsonData(null);
       }
     };
     fetchJson();
@@ -73,6 +81,7 @@ export const FileEdit = ({ docId }: { docId: string }) => {
   return (
     <>
       <LanguageSelector />
+      <SortKeysBySelector />
       <div>
         <h2 className="font-bold">
           {docId}
