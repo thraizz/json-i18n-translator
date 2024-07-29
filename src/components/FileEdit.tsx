@@ -1,5 +1,5 @@
-import { useState, useEffect, useMemo } from "react";
-import { useForm, Controller } from "react-hook-form";
+import { useState, useEffect, useMemo, Fragment } from "react";
+import { useForm, Controller, useFieldArray } from "react-hook-form";
 import {
   fetchJsonFile,
   updateJsonFile,
@@ -14,32 +14,48 @@ import { generateJsonFile } from "../hooks/useGenerateJsonFile";
 import { SortKeysBySelector } from "./SortKeysBySelector";
 import { sortKeysBy, useFileSorting } from "../hooks/useFileSorting";
 
+export type Field = {
+  label: string;
+  value: string;
+};
+
+type EditForm = {
+  keys: Array<Field>;
+};
+type Status = { type: "success" | "error"; message: string };
+
 export const FileEdit = ({ docId }: { docId: string }) => {
-  type EditForm = {
-    [key: string]: string;
-  };
   const { sorting } = useFileSorting();
-  type Status = { type: "success" | "error"; message: string };
-  const [status, setStatus] = useState<undefined | Status>(undefined);
+  const [status, setStatus] = useState<Status | undefined>(undefined);
   const [fileUrl, setFileUrl] = useState<string | null>(null);
   const [jsonData, setJsonData] = useState<any | null>(null);
-
-  const { control, handleSubmit, reset } = useForm<EditForm>({
-    defaultValues: {},
-  });
-
   const [lang] = useJSONFileLanguage();
   const { languages } = useLanguages();
-
-  const selectedLanguage = languages.find((l) => l.id === lang);
-  const flattenedJson = useMemo(() => {
-    const flattened = sortKeysBy(flattenJson(jsonData), sorting);
-    return flattened;
-  }, [jsonData, sorting]);
-  useEffect(() => {
-    reset(flattenedJson);
-  }, [flattenedJson, reset]);
   const collectionName = useJSONCollectionName();
+
+  const { control, handleSubmit } = useForm<EditForm>({
+    defaultValues: {
+      keys: [],
+    },
+  });
+
+  const { fields, replace } = useFieldArray({
+    control,
+    name: "keys",
+  });
+
+  const selectedLanguage = useMemo(
+    () => languages.find((l) => l.id === lang),
+    [languages, lang],
+  );
+
+  const flattenedJson: Field[] = useMemo(() => {
+    return sortKeysBy(flattenJson(jsonData), sorting);
+  }, [jsonData, sorting]);
+
+  useEffect(() => {
+    replace(flattenedJson);
+  }, [flattenedJson, replace]);
 
   useEffect(() => {
     const fetchJson = async () => {
@@ -53,7 +69,7 @@ export const FileEdit = ({ docId }: { docId: string }) => {
       }
     };
     fetchJson();
-  }, [docId, reset, lang, collectionName]);
+  }, [docId, lang, collectionName]);
 
   const onSubmit = async (data: EditForm) => {
     if (!collectionName) return;
@@ -97,26 +113,26 @@ export const FileEdit = ({ docId }: { docId: string }) => {
               gridTemplateColumns: "minmax(auto, 30%) minmax(0, auto)",
             }}
           >
-            {Object.keys(flattenedJson).map((key) => (
-              <>
+            {fields.map((field, index) => (
+              <Fragment key={field.id}>
                 <label
-                  htmlFor={key}
+                  htmlFor={field.id}
                   className="text-left pr-4 font-medium w-fit max-w-full whitespace-normal break-words"
                 >
-                  {key}
+                  {field.label}
                 </label>
                 <Controller
-                  name={key}
+                  name={`keys.${index}.value` as const}
                   control={control}
-                  render={({ field }) => (
+                  render={({ field: f }) => (
                     <input
-                      {...field}
-                      id={key}
+                      {...f}
+                      id={field.id}
                       className="px-3 py-2 border border-gray-300 rounded w-full"
                     />
                   )}
                 />
-              </>
+              </Fragment>
             ))}
           </div>
           {status && (
@@ -148,7 +164,6 @@ export const FileEdit = ({ docId }: { docId: string }) => {
                 </a>
               </div>
             )}
-
             <button
               type="submit"
               className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"

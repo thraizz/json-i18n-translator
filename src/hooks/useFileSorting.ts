@@ -1,5 +1,6 @@
 import sortObject from "deep-sort-object";
 import { atom, useAtom } from "jotai";
+import { Field } from "../components/FileEdit";
 
 export const SORTING_OPTIONS = {
   ALPHABETICAL: "ALPHABETICAL",
@@ -12,17 +13,22 @@ const sortByEmpty = (a: any, b: any) => {
   return 0;
 };
 
-export const sortKeysBy = (
+export const sortKeysBy: (
   data: any,
   sorting: keyof typeof SORTING_OPTIONS,
-) => {
+) => Field[] = (data, sorting) => {
   if (sorting === SORTING_OPTIONS.ALPHABETICAL) {
-    return sortObject(data);
+    return Object.keys(sortObject(data)).map((label) => ({
+      label,
+      value: data[label],
+    }));
   } else if (sorting === SORTING_OPTIONS.BY_EMPTY) {
-    return Object.fromEntries(
+    const a = Object.fromEntries(
       Object.entries(data).sort((a, b) => sortByEmpty(a[1], b[1])),
     );
+    return Object.keys(a).map((label) => ({ label, value: a[label] }));
   }
+  return [];
 };
 
 export const sortingAtom = atom<keyof typeof SORTING_OPTIONS>("ALPHABETICAL");
