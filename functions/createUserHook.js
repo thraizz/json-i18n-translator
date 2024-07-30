@@ -1,7 +1,16 @@
 const functions = require("firebase-functions");
-
 const { getFirestore } = require("firebase-admin/firestore");
+const { Storage } = require("@google-cloud/storage");
+
+const storage = new Storage();
+
 const createDefaults = async (user) => {
+  // Create a translation bucket for this user
+  const bucketName = `translations-${user.uid}`;
+  const bucket = storage.bucket(bucketName);
+  await bucket.create();
+
+  // Create languages
   const defaultLanguages = [
     {
       id: "en",
